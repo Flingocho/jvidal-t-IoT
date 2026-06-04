@@ -1,0 +1,15 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bookworm64"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "jvidal-tS" do |server|
+    server.vm.hostname = "jvidal-tS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.provider "libvirt" do |v|
+      v.memory = 1024
+      v.cpus = 1
+    end
+    server.vm.provision "file", source: "confs", destination: "/tmp/confs"
+    server.vm.provision "shell", path: "scripts/server.sh"
+  end
+end
